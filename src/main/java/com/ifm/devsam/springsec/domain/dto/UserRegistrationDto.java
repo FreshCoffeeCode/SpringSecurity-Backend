@@ -1,5 +1,6 @@
 package com.ifm.devsam.springsec.domain.dto;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @Data
