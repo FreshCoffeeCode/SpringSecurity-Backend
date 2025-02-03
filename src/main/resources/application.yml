@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: SpringSecurity Doc for Zabi | LOCAL
+
+
+  # Database configuration
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/springsec
+    username: postgres
+    password: admin
+
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8000
+
+#logging:
+#  level:
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+#        https://www.youtube.com/watch?v=oeni_9g7too&ab_channel=Telusko
