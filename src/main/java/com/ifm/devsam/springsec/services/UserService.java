@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    void save(UserEntity user);
+    void createUser(UserEntity user);
 
     UserEntity getUserById(Long id);
 

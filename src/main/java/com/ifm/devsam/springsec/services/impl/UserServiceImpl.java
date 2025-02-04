@@ -5,6 +5,7 @@ import com.ifm.devsam.springsec.exceptions.custom.UserAlreadyExistsException;
 import com.ifm.devsam.springsec.repositories.UserRepository;
 import com.ifm.devsam.springsec.services.DepotService;
 import com.ifm.devsam.springsec.services.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class UserServiceImpl implements UserService {
 
     private final DepotService depotService;
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public UserServiceImpl(DepotService depotService, UserRepository userRepository) {
         this.depotService = depotService;
@@ -22,11 +24,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(UserEntity user) {
+    public void createUser(UserEntity user) {
         Optional<UserEntity> checkUserToSave = getUserByEmail(user.getEmail());
         if (checkUserToSave.isPresent()) {
             throw new UserAlreadyExistsException("User already exists");
         }
+        user.setPassword(encoder.encode(user.getPassword()));
         user.setDepot(depotService.getEmptyDepot());
         userRepository.save(user);
     }

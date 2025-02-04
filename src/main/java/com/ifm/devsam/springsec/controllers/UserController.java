@@ -1,11 +1,13 @@
 package com.ifm.devsam.springsec.controllers;
 
+import com.ifm.devsam.springsec.domain.dto.AuthenticationResponse;
 import com.ifm.devsam.springsec.domain.dto.UserDto;
 import com.ifm.devsam.springsec.domain.dto.UserLoginDto;
 import com.ifm.devsam.springsec.domain.dto.UserRegistrationDto;
 import com.ifm.devsam.springsec.domain.entity.UserEntity;
 import com.ifm.devsam.springsec.mappers.RegisterDtoToUserEntityMapper;
 import com.ifm.devsam.springsec.mappers.UserEntityToUserDtoMapper;
+import com.ifm.devsam.springsec.services.AuthenticationService;
 import com.ifm.devsam.springsec.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,22 +21,27 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AuthenticationService authenticationService) {
         this.userService = userService;
+        this.authenticationService = authenticationService;
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.OK)
-    public void register(@RequestBody UserRegistrationDto registerDto) {
+    public AuthenticationResponse register(@RequestBody UserRegistrationDto registerDto) {
         UserEntity userToRegister = RegisterDtoToUserEntityMapper.INSTANCE.map(registerDto);
-        userService.save(userToRegister);
+//        userService.createUser(userToRegister);
+        return authenticationService.register(userToRegister);
     }
 
     @PostMapping("/auth")
     @ResponseStatus(HttpStatus.OK)
-    public UserLoginDto login(@RequestBody UserLoginDto loginDto) {
-        return loginDto;
+    public AuthenticationResponse login(@RequestBody UserLoginDto loginDto) {
+
+//        return authenticationService.authenticate()
+        return null;
     }
 
     @GetMapping("/{email}")

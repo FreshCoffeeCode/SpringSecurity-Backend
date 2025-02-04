@@ -1,6 +1,6 @@
 spring:
   application:
-    name: SpringSecurity Doc for Zabi | LOCAL
+    name: SpringSecurity | LOCAL
 
 
   # Database configuration
