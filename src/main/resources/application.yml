@@ -12,12 +12,16 @@ spring:
 
   jpa:
     open-in-view: false
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
 
 server:
   port: 8000
+
+security:
+  jwt:
+    secret-key: VO0X5zR1xaIjERo4NqIezYpm4PEAqO4xo6z420Webek
 
 #logging:
 #  level:
