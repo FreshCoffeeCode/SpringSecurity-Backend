@@ -31,11 +31,9 @@ public class JwtAuthenticationCookieFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Get the JWT from the cookies
         String jwt = null;
         String userEmail = null;
 
-        // Loop through cookies and find the one with the "jwt" name
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
                 if ("jwt".equals(cookie.getName())) {
@@ -46,15 +44,12 @@ public class JwtAuthenticationCookieFilter extends OncePerRequestFilter {
         }
 
         if (jwt != null) {
-            // Extract the user email (or username) from the JWT
             userEmail = jwtService.extractUserName(jwt);
         }
 
-        // Proceed only if the JWT exists and the user is not already authenticated
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
-            // Validate the JWT token and set authentication if valid
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
@@ -65,8 +60,6 @@ public class JwtAuthenticationCookieFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }
-
-        // Proceed with the filter chain
         filterChain.doFilter(request, response);
     }
 }

@@ -65,20 +65,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private void setJwtCookie(HttpServletResponse response, String token) {
-        // Create a new cookie for JWT
         Cookie cookie = new Cookie("jwt", token);
 
-        // Set cookie properties
         cookie.setHttpOnly(true);       // Prevent access to cookie from JavaScript
         cookie.setSecure(true);         // Only send cookie over HTTPS
         cookie.setPath("/");            // Cookie should be available across the entire domain
         cookie.setMaxAge((int) ONE_DAY / 1000);  // Set expiry time for the cookie (same as JWT expiration)
-
-        // Add SameSite attribute (optional, helps to prevent CSRF attacks)
-        response.addHeader("Set-Cookie", cookie.getName() + "=" + cookie.getValue() +
-                "; HttpOnly; Secure; SameSite=Strict; Max-Age=" + cookie.getMaxAge());
-
-        // Optionally: set the cookie in response (this also works)
+        cookie.setAttribute("SameSite", "Lax");
         response.addCookie(cookie);
     }
 
