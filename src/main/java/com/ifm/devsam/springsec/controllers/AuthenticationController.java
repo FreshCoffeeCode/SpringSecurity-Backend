@@ -9,6 +9,7 @@ import com.ifm.devsam.springsec.mappers.UserLoginDtoToUserEntityMapper;
 import com.ifm.devsam.springsec.services.AuthenticationService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,5 +35,11 @@ public class AuthenticationController {
     public AuthenticationResponse login(@RequestBody UserLoginDto loginDto) {
         UserEntity userToLogin = UserLoginDtoToUserEntityMapper.INSTANCE.map(loginDto);
         return authenticationService.authenticate(userToLogin);
+    }
+
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.OK)
+    public AuthenticationResponse logout(HttpServletResponse response, @AuthenticationPrincipal UserEntity userEntity) {
+        return authenticationService.logout(response, userEntity);
     }
 }

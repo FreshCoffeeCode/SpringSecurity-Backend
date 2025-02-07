@@ -1,13 +1,15 @@
 package com.ifm.devsam.springsec.controllers;
 
 import com.ifm.devsam.springsec.domain.dto.UserDto;
+import com.ifm.devsam.springsec.domain.entity.UserEntity;
 import com.ifm.devsam.springsec.mappers.UserEntityToUserDtoMapper;
 import com.ifm.devsam.springsec.services.UserService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -20,17 +22,23 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/data")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto getUserByEmail(@PathVariable String email) {
-        return UserEntityToUserDtoMapper.INSTANCE.map(userService.getUserByEmail(email).get());
+    public UserDto checkForLoginNewApproach(@AuthenticationPrincipal UserEntity userEntity) {
+        return UserEntityToUserDtoMapper.INSTANCE.map(userEntity);
     }
 
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getAllUsers() {
-        return userService.getAllUsers().stream()
-                .map(UserEntityToUserDtoMapper.INSTANCE::map)
-                .collect(Collectors.toList());
-    }
+//    @GetMapping("/{email}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public UserDto getUserByEmail(@PathVariable String email) {
+//        return UserEntityToUserDtoMapper.INSTANCE.map(userService.getUserByEmail(email).get());
+//    }
+//
+//    @GetMapping
+//    @ResponseStatus(HttpStatus.OK)
+//    public List<UserDto> getAllUsers() {
+//        return userService.getAllUsers().stream()
+//                .map(UserEntityToUserDtoMapper.INSTANCE::map)
+//                .collect(Collectors.toList());
+//    }
 }

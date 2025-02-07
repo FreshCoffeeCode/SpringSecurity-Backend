@@ -29,7 +29,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     public AuthenticationServiceImpl(UserService userService,
                                      JwtService jwtService,
-                                     AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
+                                     AuthenticationManager authenticationManager,
+                                     PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
@@ -64,6 +65,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
+    @Override
+    public AuthenticationResponse logout(HttpServletResponse response, UserEntity user) {
+        String expiredToken = setRevokedJwtCookie(response, user);
+        return AuthenticationResponse.builder()
+                .token(expiredToken)
+                .build();
+    }
+
     private void setJwtCookie(HttpServletResponse response, String token) {
         Cookie cookie = new Cookie("jwt", token);
 
@@ -71,8 +80,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         cookie.setSecure(true);         // Only send cookie over HTTPS
         cookie.setPath("/");            // Cookie should be available across the entire domain
         cookie.setMaxAge((int) ONE_DAY / 1000);  // Set expiry time for the cookie (same as JWT expiration)
-        cookie.setAttribute("SameSite", "Lax");
+        cookie.setAttribute("SameSite", "None");
         response.addCookie(cookie);
+    }
+
+    private String setRevokedJwtCookie(HttpServletResponse response, UserEntity user) {
+        String expiredToken = jwtService.generateExpiredToken(user);
+        Cookie cookie = new Cookie("jwt", expiredToken);
+
+        cookie.setHttpOnly(true);       // Prevent access to cookie from JavaScript
+        cookie.setSecure(true);         // Only send cookie over HTTPS
+        cookie.setPath("/");            // Cookie should be available across the entire domain
+        cookie.setMaxAge(0);  // Set expiry time for the cookie (same as JWT expiration)
+        cookie.setAttribute("SameSite", "None");
+        response.addCookie(cookie);
+        return expiredToken;
     }
 
 }

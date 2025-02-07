@@ -20,8 +20,13 @@ public class JwtService {
     @Value("${security.jwt.secret-key}")
     private String SECRET_KEY;
     private final static int ONE_DAY = 86400 * 1000;
+    private final static int TWO_DAYS = 172800 * 1000;
 
     public String generateToken(UserDetails userDetails) {
+        return generateToken(new HashMap<>(), userDetails);
+    }
+
+    public String generateExpiredToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
@@ -56,6 +61,17 @@ public class JwtService {
     public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    private String generateExpiredToken(Map<String, Object> extractedClaims, UserDetails userDetails) {
+        return Jwts
+                .builder()
+                .claims(extractedClaims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis() - TWO_DAYS))
+                .expiration(new Date(System.currentTimeMillis() - ONE_DAY))
+                .signWith(getSignInKey(), Jwts.SIG.HS256)
+                .compact();
     }
 
     private Claims extractAllClaims(String token) {
