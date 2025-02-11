@@ -26,9 +26,9 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    public String generateExpiredToken(UserDetails userDetails) {
-        return generateExpiredToken(new HashMap<>(), userDetails);
-    }
+//    public String generateExpiredToken(UserDetails userDetails) {
+//        return generateExpiredToken(new HashMap<>(), userDetails);
+//    }
 
     public String generateToken(Map<String, Object> extractedClaims, UserDetails userDetails) {
         return Jwts
@@ -63,16 +63,16 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    private String generateExpiredToken(Map<String, Object> extractedClaims, UserDetails userDetails) {
-        return Jwts
-                .builder()
-                .claims(extractedClaims)
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis() - TWO_DAYS))
-                .expiration(new Date(System.currentTimeMillis() - ONE_DAY))
-                .signWith(getSignInKey(), Jwts.SIG.HS256)
-                .compact();
-    }
+//    private String generateExpiredToken(Map<String, Object> extractedClaims, UserDetails userDetails) {
+//        return Jwts
+//                .builder()
+//                .claims(extractedClaims)
+//                .subject(userDetails.getUsername())
+//                .issuedAt(new Date(System.currentTimeMillis() - TWO_DAYS))
+//                .expiration(new Date(System.currentTimeMillis() - ONE_DAY))
+//                .signWith(getSignInKey(), Jwts.SIG.HS256)
+//                .compact();
+//    }
 
     private Claims extractAllClaims(String token) {
         return Jwts

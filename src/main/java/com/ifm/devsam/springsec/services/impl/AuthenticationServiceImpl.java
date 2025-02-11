@@ -89,7 +89,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private String setRevokedJwtCookie(HttpServletResponse response, UserEntity user) {
-        String expiredToken = jwtService.generateExpiredToken(user);
+//        String expiredToken = jwtService.generateExpiredToken(user);
+        String expiredToken = "";
         Cookie cookie = new Cookie("jwt", expiredToken);
 
         cookie.setHttpOnly(true);       // Prevent access to cookie from JavaScript
