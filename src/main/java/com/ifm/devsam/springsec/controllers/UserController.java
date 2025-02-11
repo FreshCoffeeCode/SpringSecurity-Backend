@@ -25,7 +25,6 @@ public class UserController {
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public UserDto checkForLoginNewApproach(@AuthenticationPrincipal UserEntity userEntity) {
-        System.out.println(userEntity);
         return UserEntityToUserDtoMapper.INSTANCE.map(userEntity);
     }
 
