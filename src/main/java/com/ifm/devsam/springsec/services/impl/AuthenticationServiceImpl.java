@@ -8,12 +8,16 @@ import com.ifm.devsam.springsec.services.AuthenticationService;
 import com.ifm.devsam.springsec.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+@Slf4j
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
@@ -49,17 +53,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse authenticate(UserEntity user) {
+    public AuthenticationResponse authenticate(UserEntity user, HttpServletResponse response) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         user.getEmail(),
                         user.getPassword()
                 )
         );
-        var userToFind = userService.getUserByEmail(user.getEmail());
+        Optional<UserEntity> userToFind = userService.getUserByEmail(user.getEmail());
         if (userToFind.isEmpty()) throw new UserNotFoundException("User not found");
         var jwtToken = jwtService.generateToken(userToFind.get());
-
+        setJwtCookie(response, jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();

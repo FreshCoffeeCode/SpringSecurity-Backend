@@ -8,7 +8,7 @@ public interface AuthenticationService {
 
     AuthenticationResponse register(UserEntity user, HttpServletResponse response);
 
-    AuthenticationResponse authenticate(UserEntity user);
+    AuthenticationResponse authenticate(UserEntity user, HttpServletResponse response);
 
     AuthenticationResponse logout(HttpServletResponse response, UserEntity user);
 }

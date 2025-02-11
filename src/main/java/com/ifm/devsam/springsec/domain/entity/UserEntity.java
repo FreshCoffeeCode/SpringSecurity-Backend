@@ -34,6 +34,21 @@ public class UserEntity implements UserDetails {
     private DepotEntity depot;
 
     @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -51,20 +66,5 @@ public class UserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("USER"));
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
     }
 }

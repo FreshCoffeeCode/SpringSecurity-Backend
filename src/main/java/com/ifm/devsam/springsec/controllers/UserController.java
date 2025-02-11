@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -28,17 +31,18 @@ public class UserController {
         return UserEntityToUserDtoMapper.INSTANCE.map(userEntity);
     }
 
+
 //    @GetMapping("/{email}")
 //    @ResponseStatus(HttpStatus.OK)
 //    public UserDto getUserByEmail(@PathVariable String email) {
 //        return UserEntityToUserDtoMapper.INSTANCE.map(userService.getUserByEmail(email).get());
 //    }
 //
-//    @GetMapping
-//    @ResponseStatus(HttpStatus.OK)
-//    public List<UserDto> getAllUsers() {
-//        return userService.getAllUsers().stream()
-//                .map(UserEntityToUserDtoMapper.INSTANCE::map)
-//                .collect(Collectors.toList());
-//    }
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserDto> getAllUsers() {
+        return userService.getAllUsers().stream()
+                .map(UserEntityToUserDtoMapper.INSTANCE::map)
+                .collect(Collectors.toList());
+    }
 }

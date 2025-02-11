@@ -1,6 +1,7 @@
 package com.ifm.devsam.springsec.security.config;
 
-import com.ifm.devsam.springsec.services.UserService;
+import com.ifm.devsam.springsec.exceptions.custom.UserNotFoundException;
+import com.ifm.devsam.springsec.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +10,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -17,12 +17,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class BeanConfig {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userService.getUserByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+        return username -> userRepository.findUserEntityByEmail(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found!"));
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
@@ -33,14 +43,4 @@ public class BeanConfig {
         return authenticationProvider;
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
-    }
 }
-

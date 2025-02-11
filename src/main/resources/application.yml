@@ -21,7 +21,7 @@ server:
 
 security:
   jwt:
-    secret-key: VO0X5zR1xaIjERo4NqIezYpm4PEAqO4xo6z420Webek
+    secret-key: 66d5a92089b35016c2c0a64b1970afdcce5b10bde71dc8052b75c7a5ca32676e
 
 #logging:
 #  level:

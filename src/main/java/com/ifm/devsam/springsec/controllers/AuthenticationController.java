@@ -32,14 +32,20 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public AuthenticationResponse login(@RequestBody UserLoginDto loginDto) {
+    public AuthenticationResponse login(@RequestBody UserLoginDto loginDto, HttpServletResponse response) {
         UserEntity userToLogin = UserLoginDtoToUserEntityMapper.INSTANCE.map(loginDto);
-        return authenticationService.authenticate(userToLogin);
+        return authenticationService.authenticate(userToLogin, response);
     }
 
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.OK)
     public AuthenticationResponse logout(HttpServletResponse response, @AuthenticationPrincipal UserEntity userEntity) {
         return authenticationService.logout(response, userEntity);
+    }
+
+    @GetMapping("/verify")
+    @ResponseStatus(HttpStatus.OK)
+    public String verify() {
+        return "Authenticated :)";
     }
 }

@@ -27,7 +27,7 @@ public class JwtService {
     }
 
     public String generateExpiredToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        return generateExpiredToken(new HashMap<>(), userDetails);
     }
 
     public String generateToken(Map<String, Object> extractedClaims, UserDetails userDetails) {
