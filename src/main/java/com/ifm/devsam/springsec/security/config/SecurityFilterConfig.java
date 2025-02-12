@@ -20,7 +20,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityFilterConfig {
 
     private final JwtAuthenticationCookieFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
