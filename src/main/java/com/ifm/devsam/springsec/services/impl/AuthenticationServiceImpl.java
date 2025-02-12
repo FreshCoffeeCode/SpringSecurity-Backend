@@ -70,7 +70,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse logout(HttpServletResponse response, UserEntity user) {
+    public AuthenticationResponse logout(UserEntity user, HttpServletResponse response) {
         String expiredToken = setRevokedJwtCookie(response, user);
         return AuthenticationResponse.builder()
                 .token(expiredToken)
@@ -101,5 +101,4 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         response.addCookie(cookie);
         return expiredToken;
     }
-
 }

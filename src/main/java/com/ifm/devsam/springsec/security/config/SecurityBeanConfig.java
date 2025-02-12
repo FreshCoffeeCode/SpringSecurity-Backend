@@ -42,5 +42,4 @@ public class SecurityBeanConfig {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
-
 }

@@ -40,7 +40,7 @@ public class AuthenticationController {
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.OK)
     public AuthenticationResponse logout(HttpServletResponse response, @AuthenticationPrincipal UserEntity userEntity) {
-        return authenticationService.logout(response, userEntity);
+        return authenticationService.logout(userEntity, response);
     }
 
     @GetMapping("/verify")
