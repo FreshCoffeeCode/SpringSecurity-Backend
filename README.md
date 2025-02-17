@@ -1,3 +1,0 @@
-# Spring Security Example Project implementation
-
-Here I have to write text...
