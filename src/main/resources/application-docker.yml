@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: SpringSecurity | DOCKER
+
+
+  # Database configuration
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgres-spring-sec:5433/springsec
+    username: postgres
+    password: admin
+
+  jpa:
+    open-in-view: false
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8000
+
+security:
+  jwt:
+    secret-key: 66d5a92089b35016c2c0a64b1970afdcce5b10bde71dc8052b75c7a5ca32676e
+
+#logging:
+#  level:
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+#        https://www.youtube.com/watch?v=oeni_9g7too&ab_channel=Telusko

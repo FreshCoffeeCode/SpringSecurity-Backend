@@ -8,11 +8,31 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - spring-sec
     hostname: postgres-spring-sec
     restart: always
     ports:
       - "5433:5433"
     command: ["postgres", "-p", "5433"]
 
+  spring-sec-app:
+    container_name: spring-sec-app
+    image: spring-security
+    environment:
+      APP_PROFILE: docker
+    ports:
+      - "8000:8000"
+    networks:
+      - spring-sec
+    volumes:
+      - spring-sec_logs:/var/log/spring-security
+    depends_on:
+      - spring-sec-postgres
+
 volumes:
   postgres_data:
+  spring-sec_logs:
+
+networks:
+  spring-sec:
